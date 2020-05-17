@@ -1,0 +1,77 @@
+version: '3.5'
+services:
+  front:
+    image: yuanmomo/webase-front:1.3.1
+    container_name: front
+    restart: always
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+    ports:
+      - "5002:5002"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    volumes:
+      - ./conf/front-application.yml:/dist/conf/application-docker.yml
+      - ./h2:/dist/h2/
+      - ./log/front:/log
+      - /root/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
+      - /root/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
+      - /root/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
+  webase-node-manager:
+    image: yuanmomo/webase-node-manager:1.3.1
+    container_name: webase-node-manager
+    restart: always
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    volumes:
+      - ./log/node-manager:/log
+      - ./conf/node-manager-application.yml:/dist/conf/application-docker.yml
+    ports:
+      - "5001:5001"
+    depends_on:
+      - "mysql"
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+
+  mysql:
+    #构建mysql镜像
+    image: yuanmomo/webase-mysql:1.3.1
+    container_name: mysql-server # 容器名
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root #root管理员用户密码
+      MYSQL_DATABASE: webasenodemanager
+      MYSQL_USER: defaultAccount
+      MYSQL_PASSWORD: defaultPassword
+    ports:
+      - '3306:3306'  #host物理直接映射端口为3306
+    volumes:
+      #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
+      - "./mysql/data:/var/lib/mysql"
+      #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
+      - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+
+  web:
+    image: yuanmomo/webase-web:1.3.1
+    container_name: webase-web
+    environment:
+      - ACME_AGREE=true
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+    depends_on:
+      - "webase-node-manager"
+    volumes:
+      - ./conf/Caddyfile:/etc/Caddyfile
+      - ./caddy/:/root/.caddy/
+      - ./log/caddy:/var/log/caddy
+      - ./static:/static
+
+#networks:
+#  webase_network:
+#    name: webase_network

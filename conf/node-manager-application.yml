@@ -1,0 +1,4 @@
+#constants
+sdk:
+  encryptType: 0 # 1:guomi, 0:standard
+

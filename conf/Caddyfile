@@ -1,0 +1,17 @@
+http://0.0.0.0:5000 {
+    root /dist
+    index index.html
+    tls off
+    errors /var/log/caddy/error.log
+    timeouts none
+    log / /var/log/caddy/access.log " {remote} - {user} [{when}] \"{method} {uri} {proto}\" {status} {size}" {
+        rotate_size 100
+        rotate_age  90
+        rotate_keep 90
+    }
+    proxy /mgr/ 127.0.0.1:5001 {
+        without /mgr
+        transparent
+        header_upstream -Origin
+    }
+}
