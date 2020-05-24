@@ -1,21 +1,63 @@
-# 使用说明
+# FISCO-BCOS，WeBASE 一键部署
 
-# 生成节点
+## 项目说明
+该项目是 FISCO-BCOS 和 WeBASE 中间件的一键快速部署工具。基于 Docker 和 Docker Compose 实现。
+
+主要是为了简化部署流程和步骤，快速的部署一个区块链底层服务，以及一个可视化的管理界面，达到快速上手，快速使用的目的。
+
+部署后的结构如下：
+![fisco-bcos-webase-docker-compose-architecture](https://img.tupm.net/2020/05/7D8E4C6141A6DF270B96D90EF3DCA775.jpg)
+
+## 使用方法
+
+### 部署
 
 ```Bash
-# 安装节点工具
-sudo apt install -y openssl curl
+# 生成节点配置文件
+# 默认使用 FISCO-BCOS build_chain.sh 为 v2.4.0 版本；
+# 默认使用 WeBASE 镜像版本为 v1.3.1 版本；
+$ bash deploy.sh
 
-cd ~ && mkdir -p fisco && cd fisco
+# 部署标密版本
+# -b 指定 FISCO-BCOS build_chain.sh 的 v2.4.0；
+# -w 指定 WeBASE 镜像版本；
+$ bash deploy.sh -w v1.3.1 -b v2.4.0 
 
-curl -LO https://github.com/FISCO-BCOS/FISCO-BCOS/releases/download/v2.4.0/build_chain.sh && chmod u+x build_chain.sh
- 
-bash build_chain.sh -l "127.0.0.1:4" -p 30300,20200,8545 -d
+# 部署国密版本
+# -g 部署国密版本
+$ bash deploy.sh -w v1.3.1 -b v2.4.0 -g
+
+# 脚本帮助文档
+$ bash deploy.sh -h
+Usage:
+    deploy.sh [-w webase_docker_tag] [-b build_version] [-g] [-h]
+    -w        The WeBASE docker image tag, default v1.3.1
+    -b        The version of build chain shell script, default v2.4.0.
+    -g        Use guomi, default no.
+    -h        Show help info.
+
 ```
+### 启动
+
+```Bash
+bash start.sh
+```
+### 停止
+
+```Bash
+bash stop.sh
+```
+
+## 镜像编译
+执行 `dockerfile` 目录中的 `build_image.sh`，根据提示选择需要版本的版本，输入新的标签 `tag`。
+
+如果需要需要编译指定的 GitHub 仓库，修改 `build_image.sh` 脚本中的仓库地址和 `branch` 分支即可。
 
 # TODO List
 
-* 增加 `start.sh` 脚本，整合 `build_chain.sh` 和 `docker compose` 命令；
-* 优化各个项目的 Docker 镜像结构；
-* 完成 README.md 文档；
+* ~~增加 `start.sh` 脚本，整合 `build_chain.sh` 和 `docker compose` 命令；~~
+* ~~优化各个项目的 Docker 镜像结构；~~
+* ~~增加 Docker 镜像编译脚本；~~
+* ~~完成 README.md 文档；~~
 * 设计和实现镜像更新方案；
+* 升级版本；

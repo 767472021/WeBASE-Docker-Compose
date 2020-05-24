@@ -1,12 +1,14 @@
 version: '3.5'
 services:
   front:
-    image: yuanmomo/webase-front:1.3.1
+    image: yuanmomo/webase-front:${WEBASE_DOCKER_TAG}
     container_name: front
     restart: always
     network_mode: "host"
     #networks:
     #  - webase_network
+    depends_on:
+      - "node3"
     ports:
       - "5002:5002"
     environment:
@@ -15,11 +17,12 @@ services:
       - ./conf/front-application.yml:/dist/conf/application-docker.yml
       - ./h2:/dist/h2/
       - ./log/front:/log
-      - /root/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
-      - /root/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
-      - /root/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
+      - ~/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
+      - ~/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
+      - ~/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
+
   webase-node-manager:
-    image: yuanmomo/webase-node-manager:1.3.1
+    image: yuanmomo/webase-node-manager:${WEBASE_DOCKER_TAG}
     container_name: webase-node-manager
     restart: always
     environment:
@@ -37,7 +40,7 @@ services:
 
   mysql:
     #构建mysql镜像
-    image: yuanmomo/webase-mysql:1.3.1
+    image: yuanmomo/webase-mysql:${WEBASE_MYSQL_TAG}
     container_name: mysql-server # 容器名
     restart: always
     environment:
@@ -57,21 +60,57 @@ services:
     #  - webase_network
 
   web:
-    image: yuanmomo/webase-web:1.3.1
+    image: yuanmomo/webase-web:${WEBASE_DOCKER_TAG}
     container_name: webase-web
     environment:
       - ACME_AGREE=true
     network_mode: "host"
-    #networks:
-    #  - webase_network
     depends_on:
       - "webase-node-manager"
     volumes:
       - ./conf/Caddyfile:/etc/Caddyfile
       - ./caddy/:/root/.caddy/
       - ./log/caddy:/var/log/caddy
-      - ./static:/static
 
-#networks:
-#  webase_network:
-#    name: webase_network
+  node0:
+    image: fiscoorg/fiscobcos:${BUILD_VERSION}
+    container_name: rootfisconodes127.0.0.1node0
+    working_dir: /data
+    command: -c config.ini
+    network_mode: "host"
+    volumes:
+      - ~/fisco/nodes/127.0.0.1/node0:/data
+
+  node1:
+    image: fiscoorg/fiscobcos:${BUILD_VERSION}
+    container_name: rootfisconodes127.0.0.1node1
+    working_dir: /data
+    command: -c config.ini
+    network_mode: "host"
+    depends_on:
+      - "node0"
+    volumes:
+      - ~/fisco/nodes/127.0.0.1/node1:/data
+
+  node2:
+    image: fiscoorg/fiscobcos:${BUILD_VERSION}
+    container_name: rootfisconodes127.0.0.1node2
+    working_dir: /data
+    command: -c config.ini
+    network_mode: "host"
+    depends_on:
+      - "node1"
+    volumes:
+      - ~/fisco/nodes/127.0.0.1/node2:/data
+  node3:
+    image: fiscoorg/fiscobcos:${BUILD_VERSION}
+    container_name: rootfisconodes127.0.0.1node3
+    working_dir: /data
+    command: -c config.ini
+    network_mode: "host"
+    depends_on:
+      - "node2"
+    volumes:
+      - ~/fisco/nodes/127.0.0.1/node3:/data
+
+
