@@ -10,7 +10,6 @@ COPY build.gradle build.gradle
 # build
 RUN gradle build -x test
 
-
 FROM openjdk:8-jdk-alpine as prod
 
 RUN apk --no-cache add bash curl wget
@@ -19,6 +18,8 @@ COPY --from=builder /code/dist/lib                  /dist/lib
 COPY --from=builder /code/dist/conf_template        /dist/conf
 COPY --from=builder /code/dist/apps                 /dist/apps
 
+
+WORKDIR /dist
 EXPOSE 5002
 
 ENV CLASSPATH "/dist/conf/:/dist/apps/*:/dist/lib/*"

@@ -30,7 +30,7 @@ $ bash deploy.sh -w v1.3.2 -b v2.4.1 -g
 # 脚本帮助文档
 $ bash deploy.sh -h
 Usage:
-    deploy.sh [-w webase_docker_tag] [-b build_version] [-g] [-h]
+    deploy.sh [-w docker_tag] [-b build_version] [-g] [-h]
     -w        The docker image tag, default v1.3.2
     -b        The version of build chain shell script, default v2.4.1.
     -g        Use guomi, default no.

@@ -14,7 +14,7 @@ services:
     volumes:
       - ./conf/front-application.yml:/dist/conf/application-docker.yml
       - ./run/h2:/dist/h2/
-      - ./run/log/front:/log
+      - ./run/log/front:/dist/log
       - ./run/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
       - ./run/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
       - ./run/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
