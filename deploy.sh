@@ -106,7 +106,7 @@ fi
 
 ${cmd} install -y openssl wget curl
 
-fisco_dir=~/fisco
+fisco_dir=${__root}/fisco
 
 if [ ! -d "${fisco_dir}" ]; then
   mkdir -p "${fisco_dir}"
@@ -119,7 +119,7 @@ fi
 
 # download build_chain.sh and generate nodes config
 cd "${fisco_dir}" && curl -LO https://github.com/FISCO-BCOS/FISCO-BCOS/releases/download/"${BUILD_VERSION}"/build_chain.sh && chmod u+x build_chain.sh
-bash build_chain.sh -l "127.0.0.1:4" -d "$guomi_opt" -o fisco/nodes
+bash build_chain.sh -l "127.0.0.1:4" -d "$guomi_opt" -o ${fisco_dir}
 
 # 根据系统, 安装 docker
 case $(uname | tr '[:upper:]' '[:lower:]') in
