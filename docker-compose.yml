@@ -60,7 +60,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
-      - ./log/node-manager:/log
+      - ./log/sign:/log
       - ./conf/sign-application.yml:/dist/conf/application-docker.yml
     ports:
       - "127.0.0.1:5004:5004"
