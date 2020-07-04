@@ -2,5 +2,5 @@
 sdk:
   encryptType: 0 # 1:guomi, 0:standard
 constant:
-  keyServer: 127.0.0.1:5004 # webase-sign服务的IP:Port（单个）
+  keyServer: 127.0.0.1:5004 # sign服务的IP:Port（单个）
 

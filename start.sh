@@ -43,6 +43,6 @@ __base="$(basename ${__file} .sh)"
 #     比如: bin, script 等，需要根据场景修改
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on your app
 
-# 启动 WeBASE 中间件
+# 启动中间件服务
 LOG_INFO "Docker Compose up..."
 cd "${__dir}" && docker-compose up -d

@@ -97,8 +97,8 @@ function dockerBuild(){
       ;;
    s)
       new_name=yuanmomo/manager-mysql:"${new_version}"
-      cat Dockerfile-MySQL | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
-      cat Dockerfile-MySQL-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
+      cat Dockerfile-MySQL-Manager | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
+      cat Dockerfile-MySQL-Manager-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       docker push "${new_name}"
       docker push "${new_name}"-gm
       ;;
@@ -111,11 +111,11 @@ function dockerBuild(){
 }
 
 echo "请选择编译镜像: "
-echo "  f: 编译 WeBASE-Front 镜像; "
-echo "  m: 编译 WeBASE-Node_Manager 镜像; "
-echo "  w: 编译 WeBASE-Web 镜像; "
-echo "  s: 编译 WeBASE-MySQL 镜像; "
-echo "  k: 编译 WeBASE-Sign 镜像; "
+echo "  f: 编译 Front 镜像; "
+echo "  m: 编译 Node-Manager 镜像; "
+echo "  w: 编译 Web 镜像; "
+echo "  s: 编译 MySQL 镜像; "
+echo "  k: 编译 Sign 镜像; "
 readValue "编译模块, 默认: f ? " "^([Ff]|[Mm]|[Ww]|[Ss]|[Kk])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
 

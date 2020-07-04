@@ -1,29 +1,27 @@
 version: '3.5'
 services:
   front:
-    image: yuanmomo/webase-front:${WEBASE_DOCKER_TAG}
+    image: yuanmomo/front:${DOCKER_TAG}
     container_name: front
     restart: always
     network_mode: "host"
-    #networks:
-    #  - webase_network
     depends_on:
       - "node3"
     ports:
-      - "5002:5002"
+      - "127.0.0.1:5002:5002"
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
       - ./conf/front-application.yml:/dist/conf/application-docker.yml
       - ./h2:/dist/h2/
       - ./log/front:/log
-      - ~/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
-      - ~/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
-      - ~/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
+      - ./fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
+      - ./fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
+      - ./fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
 
-  webase-node-manager:
-    image: yuanmomo/webase-node-manager:${WEBASE_DOCKER_TAG}
-    container_name: webase-node-manager
+  node-manager:
+    image: yuanmomo/manager:${DOCKER_TAG}
+    container_name: node-manager
     restart: always
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
@@ -31,21 +29,19 @@ services:
       - ./log/node-manager:/log
       - ./conf/node-manager-application.yml:/dist/conf/application-docker.yml
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     depends_on:
       - "mysql"
     network_mode: "host"
-    #networks:
-    #  - webase_network
 
   mysql-manager:
     #构建mysql镜像
-    image: yuanmomo/webase-mysql:${WEBASE_MYSQL_TAG}
+    image: yuanmomo/manager-mysql:${MYSQL_TAG}
     container_name: mysql-manager-server # 容器名
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root #root管理员用户密码
-      MYSQL_DATABASE: webasenodemanager
+      MYSQL_DATABASE: nodemanager
       MYSQL_USER: defaultAccount
       MYSQL_PASSWORD: defaultPassword
     ports:
@@ -56,8 +52,6 @@ services:
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
       - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
     network_mode: "host"
-    #networks:
-    #  - webase_network
 
   mysql-sign:
     #构建mysql镜像
@@ -66,7 +60,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root #root管理员用户密码
-      MYSQL_DATABASE: webasesign
+      MYSQL_DATABASE: sign
       MYSQL_USER: dbUsername
       MYSQL_PASSWORD: dbPassword
     ports:
@@ -77,17 +71,15 @@ services:
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
       - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
     network_mode: "host"
-    #networks:
-    #  - webase_network
 
   web:
-    image: yuanmomo/webase-web:${WEBASE_DOCKER_TAG}
-    container_name: webase-web
+    image: yuanmomo/web:${DOCKER_TAG}
+    container_name: web
     environment:
       - ACME_AGREE=true
     network_mode: "host"
     depends_on:
-      - "webase-node-manager"
+      - "node-manager"
     volumes:
       - ./conf/Caddyfile:/etc/Caddyfile
       - ./caddy/:/root/.caddy/

@@ -1,10 +1,3 @@
-# build command :
-#   cat Dockerfile-Node-Manager | docker build -t yuanmomo/webase-node-manager:1.3.1 -f - https://github.com/CodingCattwo/WeBASE-Node-Manager.git#dev131
-#
-# run command :
-#   docker run --rm --name "manager" --network=host yuanmomo/webase-node-manager:1.3.1
-#
-
 FROM gradle:6.4.0-jdk8 as builder
 LABEL maintainer yuanhongbin9090@gmail.com
 

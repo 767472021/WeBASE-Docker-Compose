@@ -1,12 +1,12 @@
-# FISCO-BCOS，WeBASE 一键部署
+# FISCO-BCOS，区块链中间件 一键部署
 
 ## 项目说明
-该项目是 FISCO-BCOS 和 WeBASE 中间件的一键快速部署工具。基于 Docker 和 Docker Compose 实现。
+该项目是 FISCO-BCOS 和 区块链中间件 中间件的一键快速部署工具。基于 Docker 和 Docker Compose 实现。
 
 主要是为了简化部署流程和步骤，快速的部署一个区块链底层服务，以及一个可视化的管理界面，达到快速上手，快速使用的目的。
 
 部署后的结构如下：
-![fisco-bcos-webase-docker-compose-architecture](https://img.tupm.net/2020/05/7D8E4C6141A6DF270B96D90EF3DCA775.jpg)
+![fisco-bcos-docker-compose-architecture](https://img.tupm.net/2020/05/7D8E4C6141A6DF270B96D90EF3DCA775.jpg)
 
 ## 使用方法
 
@@ -14,25 +14,25 @@
 
 ```Bash
 # 生成节点配置文件
-# 默认使用 FISCO-BCOS build_chain.sh 为 v2.4.0 版本；
-# 默认使用 WeBASE 镜像版本为 v1.3.1 版本；
+# 默认使用 FISCO-BCOS build_chain.sh 为 v2.4.1 版本；
+# 默认使用 Docker 镜像版本为 v1.3.2 版本；
 $ bash deploy.sh
 
 # 部署标密版本
-# -b 指定 FISCO-BCOS build_chain.sh 的 v2.4.0；
-# -w 指定 WeBASE 镜像版本；
-$ bash deploy.sh -w v1.3.1 -b v2.4.0 
+# -b 指定 FISCO-BCOS build_chain.sh 的 v2.4.1；
+# -w 指定 Docker 镜像版本；
+$ bash deploy.sh -w v1.3.2 -b v2.4.1 
 
 # 部署国密版本
 # -g 部署国密版本
-$ bash deploy.sh -w v1.3.1 -b v2.4.0 -g
+$ bash deploy.sh -w v1.3.2 -b v2.4.1 -g
 
 # 脚本帮助文档
 $ bash deploy.sh -h
 Usage:
     deploy.sh [-w webase_docker_tag] [-b build_version] [-g] [-h]
-    -w        The WeBASE docker image tag, default v1.3.1
-    -b        The version of build chain shell script, default v2.4.0.
+    -w        The docker image tag, default v1.3.2
+    -b        The version of build chain shell script, default v2.4.1.
     -g        Use guomi, default no.
     -h        Show help info.
 

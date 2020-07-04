@@ -48,18 +48,18 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on
 cmdname=$(basename $0)
 guomi_opt=""
 guomi_suffix=""
-BUILD_VERSION="v2.4.0"
+BUILD_VERSION="v2.4.1"
 encrypt_type="0"
-WEBASE_DOCKER_TAG="v1.3.1"
-WEBASE_MYSQL_TAG=""
+DOCKER_TAG="v1.3.2"
+MYSQL_TAG=""
 
 # usage help doc.
 usage() {
     cat << USAGE  >&2
 Usage:
-    $cmdname [-w WEBASE_DOCKER_TAG] [-b build_version] [-g] [-h]
-    -w        The WeBASE docker image tag, default v1.3.1
-    -b        The version of build chain shell script, default v2.4.0.
+    $cmdname [-w DOCKER_TAG] [-b build_version] [-g] [-h]
+    -w        The docker image tag, default v1.3.2
+    -b        The version of build chain shell script, default v2.4.1.
     -g        Use guomi, default no.
     -h        Show help info.
 USAGE
@@ -69,7 +69,7 @@ USAGE
 while getopts w:b:gh OPT;do
     case $OPT in
         w)
-            WEBASE_DOCKER_TAG=$OPTARG
+            DOCKER_TAG=$OPTARG
             ;;
         b)
             BUILD_VERSION=$OPTARG
@@ -147,11 +147,11 @@ esac
 cd "${__dir}"
 # 修改配置文件
 LOG_INFO "Update configuration files..."
-WEBASE_MYSQL_TAG="${WEBASE_DOCKER_TAG}${guomi_suffix}"
+MYSQL_TAG="${DOCKER_TAG}${guomi_suffix}"
 BUILD_VERSION="${BUILD_VERSION}${guomi_suffix}"
 
-export WEBASE_DOCKER_TAG
-export WEBASE_MYSQL_TAG
+export DOCKER_TAG
+export MYSQL_TAG
 export BUILD_VERSION
 
 replaceFile docker-compose.yml
