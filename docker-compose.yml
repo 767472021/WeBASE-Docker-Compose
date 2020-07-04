@@ -31,7 +31,7 @@ services:
     ports:
       - "127.0.0.1:5001:5001"
     depends_on:
-      - "mysql"
+      - "mysql-manager"
     network_mode: "host"
 
   mysql-manager:
@@ -51,6 +51,21 @@ services:
       - "./mysql/manager/data:/var/lib/mysql"
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
       - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
+    network_mode: "host"
+
+  sign:
+    image: yuanmomo/sign:${DOCKER_TAG}
+    container_name: sign
+    restart: always
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    volumes:
+      - ./log/node-manager:/log
+      - ./conf/sign-application.yml:/dist/conf/application-docker.yml
+    ports:
+      - "127.0.0.1:5004:5004"
+    depends_on:
+      - "mysql-sign"
     network_mode: "host"
 
   mysql-sign:
