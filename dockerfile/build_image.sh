@@ -53,7 +53,6 @@ function readValue(){
 }
 
 function dockerBuild(){
-
   target_module=""
   case $1 in
    f)
@@ -68,37 +67,45 @@ function dockerBuild(){
    s)
           target_module="Dockerfile-MySQL"
           ;;
+   k)
+          target_module="Dockerfile-Sign"
+          ;;
   esac
 
   LOG_INFO "Start to build [${target_module}] docker image..."
-  readValue "镜像的新标签, 默认: v1.3.1 ? " "^v[0-9]+\.[0-9]+\.[0-9]+$" "v1.3.1"
+  readValue "镜像的新标签, 默认: v1.3.2 ? " "^v[0-9]+\.[0-9]+\.[0-9]+$" "v1.3.2"
   new_version="${read_value}"
   branch="$2"
 
   cd ${__root}/dockerfile
   case $1 in
    f)
-      new_name=yuanmomo/webase-front:"${new_version}"
+      new_name=yuanmomo/front:"${new_version}"
       cat Dockerfile-Front | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Front.git#"${branch}"
       docker push "${new_name}"
       ;;
    m)
 
-      new_name=yuanmomo/webase-node-manager:"${new_version}"
+      new_name=yuanmomo/manager:"${new_version}"
       cat Dockerfile-Node-Manager | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       docker push "${new_name}"
       ;;
    w)
-      new_name=yuanmomo/webase-web:"${new_version}"
+      new_name=yuanmomo/web:"${new_version}"
       cat Dockerfile-Web | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Web.git#"${branch}"
       docker push "${new_name}"
       ;;
    s)
-      new_name=yuanmomo/webase-mysql:"${new_version}"
+      new_name=yuanmomo/manager-mysql:"${new_version}"
       cat Dockerfile-MySQL | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       cat Dockerfile-MySQL-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       docker push "${new_name}"
       docker push "${new_name}"-gm
+      ;;
+   k)
+      new_name=yuanmomo/sign:"${new_version}"
+      cat Dockerfile-Sign | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Sign.git#"${branch}"
+      docker push "${new_name}"
       ;;
   esac
 }
@@ -108,7 +115,8 @@ echo "  f: 编译 WeBASE-Front 镜像; "
 echo "  m: 编译 WeBASE-Node_Manager 镜像; "
 echo "  w: 编译 WeBASE-Web 镜像; "
 echo "  s: 编译 WeBASE-MySQL 镜像; "
-readValue "编译模块, 默认: f ? " "^([Ff]|[Mm]|[Ww]|[Ss])$" "f"
+echo "  k: 编译 WeBASE-Sign 镜像; "
+readValue "编译模块, 默认: f ? " "^([Ff]|[Mm]|[Ww]|[Ss]|[Kk])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
 
 dockerBuild "$target_image" "master"

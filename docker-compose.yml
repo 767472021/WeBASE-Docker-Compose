@@ -38,10 +38,10 @@ services:
     #networks:
     #  - webase_network
 
-  mysql:
+  mysql-manager:
     #构建mysql镜像
     image: yuanmomo/webase-mysql:${WEBASE_MYSQL_TAG}
-    container_name: mysql-server # 容器名
+    container_name: mysql-manager-server # 容器名
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root #root管理员用户密码
@@ -52,7 +52,28 @@ services:
       - '3306:3306'  #host物理直接映射端口为3306
     volumes:
       #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
-      - "./mysql/data:/var/lib/mysql"
+      - "./mysql/manager/data:/var/lib/mysql"
+      #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
+      - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+
+  mysql-sign:
+    #构建mysql镜像
+    image: mysql:5.7
+    container_name: mysql-sign-server # 容器名
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root #root管理员用户密码
+      MYSQL_DATABASE: webasesign
+      MYSQL_USER: dbUsername
+      MYSQL_PASSWORD: dbPassword
+    ports:
+      - '3307:3306'  #host物理直接映射端口为3306
+    volumes:
+      #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
+      - "./mysql/sign/data:/var/lib/mysql"
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
       - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
     network_mode: "host"
@@ -79,7 +100,7 @@ services:
     command: -c config.ini
     network_mode: "host"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node0:/data
+      - ./fisco/nodes/127.0.0.1/node0:/data
 
   node1:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
@@ -90,7 +111,7 @@ services:
     depends_on:
       - "node0"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node1:/data
+      - ./fisco/nodes/127.0.0.1/node1:/data
 
   node2:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
@@ -101,7 +122,7 @@ services:
     depends_on:
       - "node1"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node2:/data
+      - ./fisco/nodes/127.0.0.1/node2:/data
   node3:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
     container_name: rootfisconodes127.0.0.1node3
@@ -111,6 +132,6 @@ services:
     depends_on:
       - "node2"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node3:/data
+      - ./fisco/nodes/127.0.0.1/node3:/data
 
 

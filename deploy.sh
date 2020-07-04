@@ -119,7 +119,7 @@ fi
 
 # download build_chain.sh and generate nodes config
 cd "${fisco_dir}" && curl -LO https://github.com/FISCO-BCOS/FISCO-BCOS/releases/download/"${BUILD_VERSION}"/build_chain.sh && chmod u+x build_chain.sh
-bash build_chain.sh -l "127.0.0.1:4" -d "$guomi_opt"
+bash build_chain.sh -l "127.0.0.1:4" -d "$guomi_opt" -o fisco/nodes
 
 # 根据系统, 安装 docker
 case $(uname | tr '[:upper:]' '[:lower:]') in
@@ -157,6 +157,7 @@ export BUILD_VERSION
 replaceFile docker-compose.yml
 
 sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/front-application.yml
+sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/sign-application.yml
 sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/node-manager-application.yml
 
 if [[ ! $(command -v docker-compose) ]]; then
