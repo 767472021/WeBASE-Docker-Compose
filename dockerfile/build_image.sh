@@ -111,5 +111,5 @@ echo "  s: 编译 WeBASE-MySQL 镜像; "
 readValue "编译模块, 默认: f ? " "^([Ff]|[Mm]|[Ww]|[Ss])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
 
-dockerBuild "$target_image" "dev"
+dockerBuild "$target_image" "master"
 

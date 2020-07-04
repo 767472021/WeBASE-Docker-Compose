@@ -22,9 +22,9 @@ FROM openjdk:8-jdk-alpine as prod
 
 RUN apk --no-cache add bash curl wget
 
-COPY --from=builder /code/dist/apps                 /dist/apps
-COPY --from=builder /code/dist/conf_template        /dist/conf
 COPY --from=builder /code/dist/lib                  /dist/lib
+COPY --from=builder /code/dist/conf_template        /dist/conf
+COPY --from=builder /code/dist/apps                 /dist/apps
 
 EXPOSE 5002
 
