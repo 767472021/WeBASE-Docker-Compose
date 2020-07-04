@@ -106,7 +106,7 @@ fi
 
 ${cmd} install -y openssl wget curl
 
-fisco_dir=${__dir}/fisco
+fisco_dir=${__dir}/run/fisco
 
 if [ ! -d "${fisco_dir}" ]; then
   mkdir -p "${fisco_dir}"
