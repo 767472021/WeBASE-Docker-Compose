@@ -120,7 +120,7 @@ echo "  s: 编译 Manager-MySQL 镜像; "
 echo "  k: 编译 Sign 镜像; "
 echo "  t: 编译 Transaction 镜像; "
 echo "  a: 全量编译 Front, Node-Manager, Web, Manager-Mysql, Sign 镜像; "
-readValue "编译模块, 默认: f ? " "^([aA]|[Ff]|[Mm]|[Ww]|[Ss]|[Kk])$" "f"
+readValue "编译模块, 默认: f ? " "^([aA]|[Ff]|[Mm]|[Ww]|[Ss]|[Kk]|[tT])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
 
 if [[ "${target_image}"x == "a"x ]] ; then
