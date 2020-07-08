@@ -14,25 +14,25 @@
 
 ```Bash
 # 生成节点配置文件
-# 默认使用 FISCO-BCOS build_chain.sh 为 v2.4.0 版本；
-# 默认使用 WeBASE 镜像版本为 v1.3.1 版本；
+# 默认使用 FISCO-BCOS build_chain.sh 为 v2.4.1 版本；
+# 默认使用 WeBASE 镜像版本为 v1.3.2 版本；
 $ bash deploy.sh
 
 # 部署标密版本
-# -b 指定 FISCO-BCOS build_chain.sh 的 v2.4.0；
+# -b 指定 FISCO-BCOS build_chain.sh 的 v2.4.1；
 # -w 指定 WeBASE 镜像版本；
-$ bash deploy.sh -w v1.3.1 -b v2.4.0 
+$ bash deploy.sh -w v1.3.2 -b v2.4.1
 
 # 部署国密版本
 # -g 部署国密版本
-$ bash deploy.sh -w v1.3.1 -b v2.4.0 -g
+$ bash deploy.sh -w v1.3.2 -b v2.4.1 -g
 
 # 脚本帮助文档
 $ bash deploy.sh -h
 Usage:
     deploy.sh [-w webase_docker_tag] [-b build_version] [-g] [-h]
-    -w        The WeBASE docker image tag, default v1.3.1
-    -b        The version of build chain shell script, default v2.4.0.
+    -w        The WeBASE docker image tag, default v1.3.2
+    -b        The version of build chain shell script, default v2.4.1.
     -g        Use guomi, default no.
     -h        Show help info.
 

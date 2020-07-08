@@ -71,7 +71,7 @@ function dockerBuild(){
   esac
 
   LOG_INFO "Start to build [${target_module}] docker image..."
-  readValue "镜像的新标签, 默认: v1.3.1 ? " "^v[0-9]+\.[0-9]+\.[0-9]+$" "v1.3.1"
+  readValue "镜像的新标签, 默认: v1.3.2 ? " "^v[0-9]+\.[0-9]+\.[0-9]+$" "v1.3.2"
   new_version="${read_value}"
   branch="$2"
 
@@ -94,22 +94,37 @@ function dockerBuild(){
       docker push "${new_name}"
       ;;
    s)
-      new_name=yuanmomo/webase-mysql:"${new_version}"
+      new_name=yuanmomo/manager-mysql:"${new_version}"
       cat Dockerfile-MySQL | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       cat Dockerfile-MySQL-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       docker push "${new_name}"
       docker push "${new_name}"-gm
       ;;
+   k)
+      new_name=yuanmomo/webase-sign:"${new_version}"
+      cat Dockerfile-Sign | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Sign.git#"${branch}"
+      docker push "${new_name}"
+      ;;
   esac
 }
 
-echo "请选择编译镜像: "
-echo "  f: 编译 WeBASE-Front 镜像; "
-echo "  m: 编译 WeBASE-Node_Manager 镜像; "
-echo "  w: 编译 WeBASE-Web 镜像; "
-echo "  s: 编译 WeBASE-MySQL 镜像; "
-readValue "编译模块, 默认: f ? " "^([Ff]|[Mm]|[Ww]|[Ss])$" "f"
+echo "  f: 编译 Front 镜像; "
+echo "  m: 编译 Node-Manager 镜像; "
+echo "  w: 编译 Web 镜像; "
+echo "  s: 编译 Manager-MySQL 镜像; "
+echo "  k: 编译 Sign 镜像; "
+echo "  a: 全量编译 Front, Node-Manager, Web, Manager-Mysql, Sign 镜像; "
+readValue "编译模块, 默认: f ? " "^([aA]|[Ff]|[Mm]|[Ww]|[Ss]|[Kk])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
 
-dockerBuild "$target_image" "master"
+if [[ "${target_image}"x == "a"x ]] ; then
+    dockerBuild "f" "master"
+    dockerBuild "m" "master"
+    dockerBuild "w" "master"
+    dockerBuild "s" "master"
+    dockerBuild "k" "master"
+else
+    dockerBuild "$target_image" "master"
+fi
+
 

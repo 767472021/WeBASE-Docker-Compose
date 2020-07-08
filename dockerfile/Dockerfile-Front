@@ -1,8 +1,8 @@
 # build command :
-#   cat Dockerfile-Front | docker build -t yuanmomo/webase-front:1.3.1 -f - https://github.com/CodingCattwo/WeBASE-Front.git#dev131
+#   cat Dockerfile-Front | docker build -t yuanmomo/webase-front:1.3.2 -f - https://github.com/WeBankFinTech/WeBASE-Front.git#master
 #
 # run command :
-# docker run --rm --name "front" --network=host -v /root/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt -v /root/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key  -v /root/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt yuanmomo/webase-front:1.3.1
+# docker run --rm --name "front" --network=host -v /root/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt -v /root/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key  -v /root/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt yuanmomo/webase-front:1.3.2
 #
 
 FROM gradle:6.4.0-jdk8 as builder
@@ -26,6 +26,7 @@ COPY --from=builder /code/dist/lib                  /dist/lib
 COPY --from=builder /code/dist/conf_template        /dist/conf
 COPY --from=builder /code/dist/apps                 /dist/apps
 
+WORKDIR /dist
 EXPOSE 5002
 
 ENV CLASSPATH "/dist/conf/:/dist/apps/*:/dist/lib/*"

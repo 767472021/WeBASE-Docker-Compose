@@ -48,9 +48,9 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on
 cmdname=$(basename $0)
 guomi_opt=""
 guomi_suffix=""
-BUILD_VERSION="v2.4.0"
+BUILD_VERSION="v2.4.1"
 encrypt_type="0"
-WEBASE_DOCKER_TAG="v1.3.1"
+WEBASE_DOCKER_TAG="v1.3.2"
 WEBASE_MYSQL_TAG=""
 
 # usage help doc.
@@ -58,8 +58,8 @@ usage() {
     cat << USAGE  >&2
 Usage:
     $cmdname [-w WEBASE_DOCKER_TAG] [-b build_version] [-g] [-h]
-    -w        The WeBASE docker image tag, default v1.3.1
-    -b        The version of build chain shell script, default v2.4.0.
+    -w        The WeBASE docker image tag, default v1.3.2
+    -b        The version of build chain shell script, default v2.4.1.
     -g        Use guomi, default no.
     -h        Show help info.
 USAGE
@@ -106,7 +106,7 @@ fi
 
 ${cmd} install -y openssl wget curl
 
-fisco_dir=~/fisco
+fisco_dir=${__dir}/run/fisco
 
 if [ ! -d "${fisco_dir}" ]; then
   mkdir -p "${fisco_dir}"
@@ -157,6 +157,7 @@ export BUILD_VERSION
 replaceFile docker-compose.yml
 
 sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/front-application.yml
+sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/sign-application.yml
 sed -i "s/encryptType.*#/encryptType: ${encrypt_type} #/g" conf/node-manager-application.yml
 
 if [[ ! $(command -v docker-compose) ]]; then

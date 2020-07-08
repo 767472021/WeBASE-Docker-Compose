@@ -15,11 +15,11 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
       - ./conf/front-application.yml:/dist/conf/application-docker.yml
-      - ./h2:/dist/h2/
-      - ./log/front:/log
-      - ~/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
-      - ~/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
-      - ~/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
+      - ./run/front/h2:/dist/h2/
+      - ./run/front/log/:/log
+      - ./run/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
+      - ./run/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
+      - ./run/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
 
   webase-node-manager:
     image: yuanmomo/webase-node-manager:${WEBASE_DOCKER_TAG}
@@ -28,19 +28,19 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
-      - ./log/node-manager:/log
+      - ./run/manager/log/:/log
       - ./conf/node-manager-application.yml:/dist/conf/application-docker.yml
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     depends_on:
-      - "mysql"
+      - "mysql-manager"
     network_mode: "host"
     #networks:
     #  - webase_network
 
-  mysql:
+  mysql-manager:
     #构建mysql镜像
-    image: yuanmomo/webase-mysql:${WEBASE_MYSQL_TAG}
+    image: yuanmomo/manager-mysql:${WEBASE_MYSQL_TAG}
     container_name: mysql-server # 容器名
     restart: always
     environment:
@@ -49,12 +49,48 @@ services:
       MYSQL_USER: defaultAccount
       MYSQL_PASSWORD: defaultPassword
     ports:
-      - '3306:3306'  #host物理直接映射端口为3306
+      - '127.0.0.1:3306:3306'  #host物理直接映射端口为3306
     volumes:
       #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
-      - "./mysql/data:/var/lib/mysql"
+      - "./run/mysql/data:/var/lib/mysql"
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
       - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
+    network_mode: "host"
+    #networks:
+    #  - webase_network
+
+  webase-sign:
+    image: yuanmomo/webase-sign:${WEBASE_DOCKER_TAG}
+    container_name: webase-sign
+    restart: always
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    volumes:
+      - ./run/sign/log:/log
+      - ./conf/sign-application.yml:/dist/conf/application-docker.yml
+    ports:
+      - "127.0.0.1:5004:5004"
+    depends_on:
+      - "mysql-sign"
+    network_mode: "host"
+
+  mysql-sign:
+    #构建mysql镜像
+    image: mysql:5.7
+    container_name: mysql-sign-server # 容器名
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root #root管理员用户密码
+      MYSQL_DATABASE: webasesign
+      MYSQL_USER: dbUsername
+      MYSQL_PASSWORD: dbPassword
+    ports:
+      - '127.0.0.1:3307:3307'  #host物理直接映射端口为3306
+    volumes:
+      #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
+      - "./run/mysql/sign/data:/var/lib/mysql"
+      #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
+      - "./conf/my-sign.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
     network_mode: "host"
     #networks:
     #  - webase_network
@@ -79,7 +115,7 @@ services:
     command: -c config.ini
     network_mode: "host"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node0:/data
+      - ./run/fisco/nodes/127.0.0.1/node0:/data
 
   node1:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
@@ -90,7 +126,7 @@ services:
     depends_on:
       - "node0"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node1:/data
+      - ./run/fisco/nodes/127.0.0.1/node1:/data
 
   node2:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
@@ -101,7 +137,7 @@ services:
     depends_on:
       - "node1"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node2:/data
+      - ./run/fisco/nodes/127.0.0.1/node2:/data
   node3:
     image: fiscoorg/fiscobcos:${BUILD_VERSION}
     container_name: rootfisconodes127.0.0.1node3
@@ -111,6 +147,6 @@ services:
     depends_on:
       - "node2"
     volumes:
-      - ~/fisco/nodes/127.0.0.1/node3:/data
+      - ./run/fisco/nodes/127.0.0.1/node3:/data
 
 
