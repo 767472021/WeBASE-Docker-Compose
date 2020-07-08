@@ -52,9 +52,9 @@ services:
       - '127.0.0.1:3306:3306'  #host物理直接映射端口为3306
     volumes:
       #mysql数据库挂载到host物理机目录/e/docker/mysql/data/db
-      - "./run/mysql/data:/var/lib/mysql"
+      - "./run/mysql/manager/data:/var/lib/mysql"
       #容器的配置目录挂载到host物理机目录/e/docker/mysql/data/conf
-      - "./conf/my.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
+      - "./conf/my-manager.cnf:/etc/mysql/conf.d/mysqlutf8.cnf"
     network_mode: "host"
     #networks:
     #  - webase_network

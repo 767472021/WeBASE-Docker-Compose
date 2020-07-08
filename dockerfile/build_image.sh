@@ -105,6 +105,11 @@ function dockerBuild(){
       cat Dockerfile-Sign | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Sign.git#"${branch}"
       docker push "${new_name}"
       ;;
+   t)
+      new_name=yuanmomo/webase-transaction:"${new_version}"
+      cat Dockerfile-Transaction | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Transaction.git#"${branch}"
+      docker push "${new_name}"
+      ;;
   esac
 }
 
@@ -113,6 +118,7 @@ echo "  m: 编译 Node-Manager 镜像; "
 echo "  w: 编译 Web 镜像; "
 echo "  s: 编译 Manager-MySQL 镜像; "
 echo "  k: 编译 Sign 镜像; "
+echo "  t: 编译 Transaction 镜像; "
 echo "  a: 全量编译 Front, Node-Manager, Web, Manager-Mysql, Sign 镜像; "
 readValue "编译模块, 默认: f ? " "^([aA]|[Ff]|[Mm]|[Ww]|[Ss]|[Kk])$" "f"
 target_image=$(echo "${read_value}" | tr [A-Z]  [a-z])
@@ -123,6 +129,7 @@ if [[ "${target_image}"x == "a"x ]] ; then
     dockerBuild "w" "master"
     dockerBuild "s" "master"
     dockerBuild "k" "master"
+    dockerBuild "t" "master"
 else
     dockerBuild "$target_image" "master"
 fi
