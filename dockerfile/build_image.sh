@@ -68,6 +68,12 @@ function dockerBuild(){
    s)
           target_module="Dockerfile-MySQL"
           ;;
+   k)
+          target_module="Dockerfile-Sign"
+          ;;
+   t)
+          target_module="Dockerfile-Transaction"
+          ;;
   esac
 
   LOG_INFO "Start to build [${target_module}] docker image..."
