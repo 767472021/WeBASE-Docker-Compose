@@ -95,8 +95,8 @@ function dockerBuild(){
       ;;
    s)
       new_name=yuanmomo/manager-mysql:"${new_version}"
-      cat Dockerfile-MySQL | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
-      cat Dockerfile-MySQL-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
+      cat Dockerfile-MySQL-Manager | docker build -t "${new_name}" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
+      cat Dockerfile-MySQL-Manager-guomi | docker build -t "${new_name}-gm" -f - https://github.com/WeBankFinTech/WeBASE-Node-Manager.git#"${branch}"
       docker push "${new_name}"
       docker push "${new_name}"-gm
       ;;
