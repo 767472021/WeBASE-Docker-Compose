@@ -16,7 +16,7 @@ services:
     volumes:
       - ./conf/front-application.yml:/dist/conf/application-docker.yml
       - ./run/front/h2:/dist/h2/
-      - ./run/front/log/:/log
+      - ./run/front/log/:/dist/log
       - ./run/fisco/nodes/127.0.0.1/sdk/ca.crt:/dist/conf/ca.crt
       - ./run/fisco/nodes/127.0.0.1/sdk/node.crt:/dist/conf/node.crt
       - ./run/fisco/nodes/127.0.0.1/sdk/node.key:/dist/conf/node.key
@@ -28,7 +28,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
-      - ./run/manager/log/:/log
+      - ./run/manager/log/:/dist/log
       - ./conf/node-manager-application.yml:/dist/conf/application-docker.yml
     ports:
       - "127.0.0.1:5001:5001"
@@ -66,7 +66,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
     volumes:
-      - ./run/sign/log:/log
+      - ./run/sign/log:/dist/log
       - ./conf/sign-application.yml:/dist/conf/application-docker.yml
     ports:
       - "127.0.0.1:5004:5004"

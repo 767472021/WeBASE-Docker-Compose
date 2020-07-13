@@ -1,4 +1,7 @@
 #constants
+spring:
+  datasource:
+    url: jdbc:h2:file:/dist/h2/webasefront;DB_CLOSE_ON_EXIT=FALSE
 sdk:
   encryptType: 0 # 1:guomi, 0:standard
 constant:
